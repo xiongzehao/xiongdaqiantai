@@ -36,7 +36,6 @@
 
                                                 <a href="/goods/43.html" v-for="subcates in item.subcates" :key="subcates.id">{{subcates.title}}</a>
 
-                                             
                                             </dd>
                                         </dl>
                                     </div>
@@ -53,7 +52,7 @@
 
                         <el-carousel height="341px">
                             <el-carousel-item v-for="item in TopData.sliderlist" :key="item.id" class="carousel-item">
-                                <router-link :to="{path:`detail/ ${item.id}`}"> <img :src="item.img_url" alt="" width="100%" height="341px"></router-link>
+                                <router-link :to="{name:'goodDetail',params:{id:item.id}}"> <img :src="item.img_url" alt="" width="100%" height="341px"></router-link>
                             </el-carousel-item>
                         </el-carousel>
 

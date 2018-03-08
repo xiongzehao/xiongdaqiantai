@@ -8,7 +8,7 @@
                   <img :src="item.img_url">
                 </div>
                 <div class="txt-box">
-                     <router-link :to="{path:`detail/${item.id}`}">{{item.title}}</router-link>
+                     <router-link :to="{name:'goodDetail',params:{id:item.id}}">{{item.title}}</router-link>
                     <span>{{item.add_time | timer}}</span>
                 </div>
             </li>

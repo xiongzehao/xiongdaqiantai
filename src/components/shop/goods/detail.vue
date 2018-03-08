@@ -3,8 +3,8 @@
         <div class="section">
             <div class="location">
                 <span>当前位置：</span>
-               <router-link to="/">首页</router-link> /
-                <a href="/goods/42/1.html">商品详情</a>
+                <router-link to="/">首页</router-link> /
+                <a>商品详情</a>
 
             </div>
         </div>
@@ -18,29 +18,56 @@
                         <div class="goods-box clearfix">
                             <!--商品图片-->
                             <div class="pic-box">
+                                <div class="magnifier" id="magnifier1">
+                                    <div class="magnifier-container">
+                                        <div class="images-cover"></div>
+                                        <!--当前图片显示容器-->
+                                        <div class="move-view"></div>
+                                        <!--跟随鼠标移动的盒子-->
+                                    </div>
+                                    <div class="magnifier-assembly">
+                                        <div class="magnifier-btn">
+                                            <span class="magnifier-btn-left">&lt;</span>
+                                            <span class="magnifier-btn-right">&gt;</span>
+                                        </div>
+                                        <!--按钮组-->
+                                        <div class="magnifier-line">
+                                            <ul class="clearfix animation03">
+                                                <li v-for="item in detailData.imglist" :key="item.id">
+                                                    <div class="small-img">
+                                                        <img :src="item.original_path" />
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!--缩略图-->
+                                    </div>
+                                    <div class="magnifier-view"></div>
+                                    <!--经过放大的图片显示容器-->
+                                </div>
 
                             </div>
                             <!--/商品图片-->
 
                             <!--商品信息-->
                             <div class="goods-spec">
-                                <h1>奔腾（BNTN） 380功放+纽约至尊 套装家庭影院</h1>
-                                <p class="subtitle">送美诗特TA20无线话筒1套+自拍神器杆！ DTS解码数字功放 HDMI、光纤、同轴多组输入输出 USB、蓝牙播放功能</p>
+                                <h1>{{goodsinfo.title}}</h1>
+                                <p class="subtitle">{{goodsinfo.sub_title}}</p>
                                 <div class="spec-box">
                                     <dl>
                                         <dt>货号</dt>
-                                        <dd id="commodityGoodsNo">SD6583245641</dd>
+                                        <dd id="commodityGoodsNo">{{goodsinfo.goods_no}}</dd>
                                     </dl>
                                     <dl>
                                         <dt>市场价</dt>
                                         <dd>
-                                            <s id="commodityMarketPrice">¥5880.00</s>
+                                            <s id="commodityMarketPrice">¥{{goodsinfo.market_price}}</s>
                                         </dd>
                                     </dl>
                                     <dl>
                                         <dt>销售价</dt>
                                         <dd>
-                                            <em class="price" id="commoditySellPrice">¥4880.00</em>
+                                            <em class="price" id="commoditySellPrice">¥{{goodsinfo.sell_price}}</em>
                                         </dd>
                                     </dl>
                                 </div>
@@ -49,17 +76,11 @@
                                     <dl>
                                         <dt>购买数量</dt>
                                         <dd>
-                                            <div class="stock-box">
-                                                <input id="commodityChannelId" type="hidden" value="2">
-                                                <input id="commodityArticleId" type="hidden" value="98">
-                                                <input id="commodityGoodsId" type="hidden" value="0">
-                                                <input id="commoditySelectNum" type="text" maxlength="9" value="1" maxvalue="10" onkeydown="return checkNumber(event);">
-                                                <a class="add" onclick="addCartNum(1);">+</a>
-                                                <a class="remove" onclick="addCartNum(-1);">-</a>
-                                            </div>
+
                                             <span class="stock-txt">
+                                                <el-input-number :min="0" size="mini" v-model="num7"></el-input-number>
                                                 库存
-                                                <em id="commodityStockNum">10</em>件
+                                                <em id="commodityStockNum">{{goodsinfo.stock_quantity}}</em>件
                                             </span>
                                         </dd>
                                     </dl>
@@ -79,82 +100,18 @@
 
                         <div id="goodsTabs" class="goods-tab bg-wrap">
                             <!--选项卡-->
-                            <div id="tabHead" class="tab-head" style="position: static; top: 517px; width: 925px;">
-                                <ul>
-                                    <li>
-                                        <a class="selected" href="javascript:;">商品介绍</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;" class="">商品评论</a>
-                                    </li>
-                                </ul>
-                            </div>
+
+                            <el-tabs type="border-card">
+                                <el-tab-pane label="图文信息">
+                                    <div v-html="goodsinfo.content"></div>
+                                </el-tab-pane>
+                                <el-tab-pane label="用户评论">
+                                    <comment></comment>
+                                </el-tab-pane>
+
+                            </el-tabs>
+
                             <!--/选项卡-->
-
-                            <!--选项内容-->
-                            <div class="tab-content entry" style="display:block;">
-                                内容
-                            </div>
-
-                            <div class="tab-content" style="display: block;">
-                                <!--网友评论-->
-                                <div class="comment-box">
-                                    <!--取得评论总数-->
-                                    <form id="commentForm" name="commentForm" class="form-box" url="/tools/submit_ajax.ashx?action=comment_add&amp;channel_id=2&amp;article_id=98">
-                                        <div class="avatar-box">
-                                            <i class="iconfont icon-user-full"></i>
-                                        </div>
-                                        <div class="conn-box">
-                                            <div class="editor">
-                                                <textarea id="txtContent" name="txtContent" sucmsg=" " datatype="*10-1000" nullmsg="请填写评论内容！"></textarea>
-                                                <span class="Validform_checktip"></span>
-                                            </div>
-                                            <div class="subcon">
-                                                <input id="btnSubmit" name="submit" type="submit" value="提交评论" class="submit">
-                                                <span class="Validform_checktip"></span>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <ul id="commentList" class="list-box">
-                                        <p style="margin:5px 0 15px 69px;line-height:42px;text-align:center;border:1px solid #f7f7f7;">暂无评论，快来抢沙发吧！</p>
-                                        <li>
-                                            <div class="avatar-box">
-                                                <i class="iconfont icon-user-full"></i>
-                                            </div>
-                                            <div class="inner-box">
-                                                <div class="info">
-                                                    <span>匿名用户</span>
-                                                    <span>2017/10/23 14:58:59</span>
-                                                </div>
-                                                <p>testtesttest</p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="avatar-box">
-                                                <i class="iconfont icon-user-full"></i>
-                                            </div>
-                                            <div class="inner-box">
-                                                <div class="info">
-                                                    <span>匿名用户</span>
-                                                    <span>2017/10/23 14:59:36</span>
-                                                </div>
-                                                <p>很清晰调动单很清晰调动单</p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <!--放置页码-->
-                                    <div class="page-box" style="margin:5px 0 0 62px">
-                                        <div id="pagination" class="digg">
-                                            <span class="disabled">« 上一页</span>
-                                            <span class="current">1</span>
-                                            <span class="disabled">下一页 »</span>
-                                        </div>
-                                    </div>
-                                    <!--/放置页码-->
-                                </div>
-
-                                <!--/网友评论-->
-                            </div>
 
                         </div>
 
@@ -162,9 +119,9 @@
                     <!--/页面左边-->
 
                     <!--页面右边-->
-                    <div class="left-220">
-                      
-                    </div>
+
+                    <m-aside :list="detailData.hotgoodslist"></m-aside>
+
                     <!--/页面右边-->
                 </div>
             </div>
@@ -173,18 +130,89 @@
 </template>
 
 <script>
+import "@/lib/imgzoom/css/magnifier.css"
+import "@/lib/imgzoom/js/magnifier.js"
+import MAside from "../public/Aside"
+import Comment from "./module/Comment"
+import $ from 'jquery'
 export default {
-    data(){
-        return {
-             id:this.$router.param.id
-        }
-    },
-    methods:{
-         getData(){}
-    },
-    mounted(){
-         console.log(this.id);
+  data() {
+    return {
+      id: this.$route.params.id,
+      num7: 1,
+      detailData: {
+        imglist: []
+      },
+      goodsinfo: {}
+    };
+  },
+  methods: {
+    getData() {
+      this.$axios.get(this.$api.goodsDetail + this.id).then(res => {
+        this.detailData = res.data.message;
+        this.goodsinfo = res.data.message.goodsinfo;
+      });
     }
+  },
+  created() {
+    this.getData();
+  },
+  components: {
+    MAside,
+    Comment
+  },
+  watch: {
+    $route() {
+      this.id = this.$route.params.id;
+      this.getData();
+       $(function() {
+      var magnifierConfig = {
+        magnifier: "#magnifier1", //最外层的大容器
+        width: 370, //承载容器宽
+        height: 370, //承载容器高
+        moveWidth: null, //如果设置了移动盒子的宽度，则不计算缩放比例
+        zoom: 5 //缩放比例
+      };
+
+      setTimeout(() => {
+           var _magnifier = $().imgzoon(magnifierConfig);
+      }, 500);
+
+      /*magnifier的内置函数调用*/
+      /*
+		//设置magnifier函数的index属性
+		_magnifier.setIndex(1);
+
+		//重新载入主图,根据magnifier函数的index属性
+		_magnifier.eqImg();
+	*/
+    });
+    }
+  },
+  mounted() {
+    $(function() {
+      var magnifierConfig = {
+        magnifier: "#magnifier1", //最外层的大容器
+        width: 370, //承载容器宽
+        height: 370, //承载容器高
+        moveWidth: null, //如果设置了移动盒子的宽度，则不计算缩放比例
+        zoom: 5 //缩放比例
+      };
+
+      setTimeout(() => {
+           var _magnifier = $().imgzoon(magnifierConfig);
+      }, 500);
+
+      /*magnifier的内置函数调用*/
+      /*
+		//设置magnifier函数的index属性
+		_magnifier.setIndex(1);
+
+		//重新载入主图,根据magnifier函数的index属性
+		_magnifier.eqImg();
+	*/
+    });
+  }
 };
 </script>
 
