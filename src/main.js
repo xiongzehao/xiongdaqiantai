@@ -9,14 +9,18 @@ import './assets/css/style.css'
 import 'normalize.css'
 import './less/index.less'
 import axios from 'axios'
-import api,{domain} from './js/api'
+import shopCart from './store/cart'
+import api, {
+  domain
+} from './js/api'
+ import Vuex from 'vuex'
 axios.defaults.baseURL = domain;
 axios.defaults.withCredentials = true;
 Vue.prototype.$axios = axios;
 Vue.prototype.$api = api;
 
 Vue.use(ElementUI)
-
+Vue.use(Vuex)
 
 
 Vue.config.productionTip = false
@@ -28,5 +32,7 @@ new Vue({
   components: {
     App
   },
-  template: '<App/>'
+  template: '<App/>',
+  store: new Vuex.Store(shopCart)
+
 })

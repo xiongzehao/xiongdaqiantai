@@ -7,7 +7,7 @@
                 <h2>{{item.catetitle}}</h2>
                 <p>
 
-                    <router-link v-for="value in item.level2catelist" :key="value.subcateid" :to="{name:'goodDetail'}">{{value.subcatetitle}}</router-link>
+                    <router-link v-for="value in item.level2catelist" :key="value.subcateid" to="{name:'goodDetail'}">{{value.subcatetitle}}</router-link>
 
                     <a href="#">更多
                         <i>+</i>

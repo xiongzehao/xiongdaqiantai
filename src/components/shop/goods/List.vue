@@ -4,7 +4,7 @@
 
             <div class="location">
                 <span>当前位置：</span>
-                <router-link :to="{path:'list'}">首页</router-link> /
+                <span>首页</span> /
             </div>
 
         </div>

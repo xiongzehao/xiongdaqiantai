@@ -75,13 +75,15 @@ router.beforeEach((to, from, next) => {
       next()
     }
 
-     if(to.name =='login'){
-       if(isLogin){
-          next('/')
-       }else{
-         next()
-       }
-     }
+    if (to.name == 'login') {
+      if (isLogin) {
+        next('/')
+      } else {
+        next()
+      }
+    }
+
+
   })
 
 })

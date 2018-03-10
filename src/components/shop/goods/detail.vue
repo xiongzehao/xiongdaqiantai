@@ -78,7 +78,7 @@
                                         <dd>
 
                                             <span class="stock-txt">
-                                                <el-input-number :min="0" size="mini" v-model="num7"></el-input-number>
+                                                <el-input-number :min="1" size="mini" v-model="num"></el-input-number>
                                                 库存
                                                 <em id="commodityStockNum">{{goodsinfo.stock_quantity}}</em>件
                                             </span>
@@ -87,8 +87,8 @@
                                     <dl>
                                         <dd>
                                             <div class="btn-buy" id="buyButton">
-                                                <button class="buy" onclick="cartAdd(this,'/',1,'/shopping.html');">立即购买</button>
-                                                <button class="add" onclick="cartAdd(this,'/',0,'/cart.html');">加入购物车</button>
+                                                <button class="buy" @click="toShopCart">立即购买</button>
+                                                <button class="add" @click="addCart">加入购物车</button>
                                             </div>
                                         </dd>
                                     </dl>
@@ -130,16 +130,16 @@
 </template>
 
 <script>
-import "@/lib/imgzoom/css/magnifier.css"
-import "@/lib/imgzoom/js/magnifier.js"
-import MAside from "../public/Aside"
-import Comment from "./module/Comment"
-import $ from 'jquery'
+import "@/lib/imgzoom/css/magnifier.css";
+import "@/lib/imgzoom/js/magnifier.js";
+import MAside from "../public/Aside";
+import Comment from "./module/Comment";
+import $ from "jquery";
 export default {
   data() {
     return {
       id: this.$route.params.id,
-      num7: 1,
+      num: 1,
       detailData: {
         imglist: []
       },
@@ -147,10 +147,27 @@ export default {
     };
   },
   methods: {
+        // 获取商品详情数据
     getData() {
       this.$axios.get(this.$api.goodsDetail + this.id).then(res => {
         this.detailData = res.data.message;
         this.goodsinfo = res.data.message.goodsinfo;
+      });
+    },
+    addCart() {
+      let newNum = this.num + (this.$store.state.cart[parseInt(this.id)] || 0);
+      this.$store.commit("cartfiy", {
+        id: parseInt(this.id),
+        num: newNum
+      });
+      this.num =1
+    },
+    //  跳转到购物车
+    toShopCart() {
+      this.$alert("是否跳转到购物车", "温馨提示", {
+        callback: () => {
+          this.$router.push({ name: "shopCart" });
+        }
       });
     }
   },
@@ -161,32 +178,33 @@ export default {
     MAside,
     Comment
   },
+    // 监听路由，id变化了重新请求商品详情数据和调用图片放大镜的方法
   watch: {
     $route() {
       this.id = this.$route.params.id;
       this.getData();
-       $(function() {
-      var magnifierConfig = {
-        magnifier: "#magnifier1", //最外层的大容器
-        width: 370, //承载容器宽
-        height: 370, //承载容器高
-        moveWidth: null, //如果设置了移动盒子的宽度，则不计算缩放比例
-        zoom: 5 //缩放比例
-      };
+      $(function() {
+        var magnifierConfig = {
+          magnifier: "#magnifier1", //最外层的大容器
+          width: 370, //承载容器宽
+          height: 370, //承载容器高
+          moveWidth: null, //如果设置了移动盒子的宽度，则不计算缩放比例
+          zoom: 5 //缩放比例
+        };
 
-      setTimeout(() => {
-           var _magnifier = $().imgzoon(magnifierConfig);
-      }, 500);
+        setTimeout(() => {
+          var _magnifier = $().imgzoon(magnifierConfig);
+        }, 500);
 
-      /*magnifier的内置函数调用*/
-      /*
+        /*magnifier的内置函数调用*/
+        /*
 		//设置magnifier函数的index属性
 		_magnifier.setIndex(1);
 
 		//重新载入主图,根据magnifier函数的index属性
 		_magnifier.eqImg();
 	*/
-    });
+      });
     }
   },
   mounted() {
@@ -200,8 +218,8 @@ export default {
       };
 
       setTimeout(() => {
-           var _magnifier = $().imgzoon(magnifierConfig);
-      }, 500);
+        var _magnifier = $().imgzoon(magnifierConfig);
+      }, 100);
 
       /*magnifier的内置函数调用*/
       /*

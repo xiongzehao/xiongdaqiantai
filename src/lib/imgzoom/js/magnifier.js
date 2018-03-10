@@ -94,7 +94,7 @@ import jQuery from 'jquery';
 			var img = new Image(),
 				src = _this.thumbnail.find("img").eq(magnifier.index).attr('src');
 
-				console.log(_this.thumbnail.find("img"));
+				
 			img.src = src;
 			
 			//承载容器的宽高
